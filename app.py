@@ -1,12 +1,4 @@
-"""
-Flask web app for the agent.
 
-Run: python api/app.py
-Then open http://localhost:5000
-
-Note: uses a single global agent/session for simplicity (fine for local demo
-use). For multi-user production use, keep a dict of Agent() per session id.
-"""
 
 import os
 import sys
