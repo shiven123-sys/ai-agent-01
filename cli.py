@@ -1,9 +1,4 @@
-"""
-Command-line chat interface for the agent.
 
-Usage:
-    python cli.py
-"""
 
 import sys
 
