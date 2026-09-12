@@ -1,13 +1,4 @@
-"""
-Tools available to the agent, plus their JSON-schema definitions in the
-OpenAI/Groq function-calling format.
 
-Each tool is a plain Python function that returns a string (the result is
-fed back to the LLM as a tool message). Add new tools by:
-  1. Writing the function below
-  2. Adding its schema to TOOL_SCHEMAS
-  3. Adding it to TOOL_REGISTRY
-"""
 
 import ast
 import json
@@ -18,11 +9,6 @@ from datetime import datetime, timezone
 import requests
 
 NOTES_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "notes_storage", "notes.json")
-
-
-# ---------------------------------------------------------------------------
-# 1. Calculator — safe arithmetic evaluation (no eval() of arbitrary code)
-# ---------------------------------------------------------------------------
 
 _ALLOWED_OPS = {
     ast.Add: operator.add,
@@ -57,22 +43,12 @@ def calculator(expression: str) -> str:
     except Exception as e:
         return json.dumps({"error": f"Could not evaluate '{expression}': {e}"})
 
-
-# ---------------------------------------------------------------------------
-# 2. Current date/time
-# ---------------------------------------------------------------------------
-
 def get_current_datetime(timezone_offset_hours: float = 0) -> str:
     now = datetime.now(timezone.utc)
     if timezone_offset_hours:
         from datetime import timedelta
         now = now + timedelta(hours=timezone_offset_hours)
-    return json.dumps({"utc_or_offset_time": now.strftime("%Y-%m-%d %H:%M:%S")})
-
-
-# ---------------------------------------------------------------------------
-# 3. Weather — Open-Meteo, free, no API key required
-# ---------------------------------------------------------------------------
+    return json.dumps({"utc_or_offset_time": now.strftime("%Y-%m-%d %H:%M:%S")}
 
 def get_weather(city: str) -> str:
     try:
@@ -101,11 +77,6 @@ def get_weather(city: str) -> str:
     except Exception as e:
         return json.dumps({"error": f"Weather lookup failed: {e}"})
 
-
-# ---------------------------------------------------------------------------
-# 4. Wikipedia summary — free, no API key required
-# ---------------------------------------------------------------------------
-
 def search_wikipedia(query: str) -> str:
     try:
         resp = requests.get(
@@ -122,11 +93,6 @@ def search_wikipedia(query: str) -> str:
         })
     except Exception as e:
         return json.dumps({"error": f"Wikipedia lookup failed: {e}"})
-
-
-# ---------------------------------------------------------------------------
-# 5. Notes — simple persistent scratchpad (local JSON file)
-# ---------------------------------------------------------------------------
 
 def _load_notes():
     if not os.path.exists(NOTES_PATH):
@@ -155,11 +121,6 @@ def list_notes(_: str = "") -> str:
         return json.dumps({"notes": [], "message": "No notes saved yet."})
     return json.dumps({"notes": notes})
 
-
-# ---------------------------------------------------------------------------
-# 6. Unit converter
-# ---------------------------------------------------------------------------
-
 _CONVERSIONS = {
     ("km", "miles"): lambda x: x * 0.621371,
     ("miles", "km"): lambda x: x / 0.621371,
@@ -180,10 +141,6 @@ def convert_units(value: float, from_unit: str, to_unit: str) -> str:
     result = _CONVERSIONS[key](value)
     return json.dumps({"value": value, "from": from_unit, "to": to_unit, "result": round(result, 4)})
 
-
-# ---------------------------------------------------------------------------
-# Registry + schemas
-# ---------------------------------------------------------------------------
 
 TOOL_REGISTRY = {
     "calculator": calculator,
