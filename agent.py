@@ -1,13 +1,4 @@
-"""
-Core agent: manages conversation history and runs the tool-calling loop
-against an OpenAI-compatible chat completions API (works with Groq or OpenAI).
 
-The loop:
-  1. Send conversation + tool schemas to the LLM
-  2. If the LLM responds with tool_calls, execute each one locally
-  3. Feed tool results back to the LLM as tool messages
-  4. Repeat until the LLM returns a plain text answer (or max iterations hit)
-"""
 
 from openai import OpenAI
 
