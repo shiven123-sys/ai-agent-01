@@ -1,14 +1,3 @@
-"""
-Central config. Loads settings from a .env file (if present) or real
-environment variables.
-
-Supports two provider modes, both using the OpenAI-compatible SDK:
-  - "groq"   (default) -> free tier, no credit card, get a key at
-              https://console.groq.com/keys
-  - "openai" -> paid, get a key at https://platform.openai.com/api-keys
-
-Set LLM_PROVIDER=openai in .env to switch.
-"""
 
 import os
 
