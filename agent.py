@@ -76,15 +76,15 @@ class Agent:
                         "tool_call_id": tc.id,
                         "content": result,
                     })
-                # loop again so the model can use the tool results
+                
                 continue
 
-            # Plain text answer — done
+            
             self.history.append({"role": "assistant", "content": msg.content})
             self._trim_history()
             return {"reply": msg.content, "tool_calls": tool_trace}
 
-        # Hit max iterations without a final answer
+        
         fallback = "I wasn't able to finish that request within the tool-call limit."
         self.history.append({"role": "assistant", "content": fallback})
         self._trim_history()
